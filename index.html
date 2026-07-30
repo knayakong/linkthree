@@ -6,27 +6,14 @@
 <title>BkT · Knaya</title>
 <meta name="description" content="Acá adentro nadie te va a pedir que seas otro pa' que te dejen sentar.">
 
-<!-- Tarjeta de previsualización (cuando alguien pega el link en WhatsApp/IG/X) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="🧸 BkT">
 <meta property="og:description" content="Si aparecías, nadie lo notaba. Si desaparecías, tampoco.">
 <meta property="og:locale" content="es_CO">
 <meta property="og:url" content="https://soy.brokenteddy.com/">
 <meta name="twitter:card" content="summary">
-<!-- ⛏ PENDIENTE: og:image (necesita una imagen alojada, 1200×630 — candidata: el oso).
-     Sin ella la tarjeta sale sin foto: funciona, pero rinde menos. Ver README §4. -->
 
 <style>
-  /* ═══════════════════════════════════════════════════════════════════════════
-     Paleta: _Brandkit/identidad-visual-bkt.md §1 — morado primario + oso rosadito.
-     ⚠ Los hex exactos siguen declarados como PENDIENTES en ese archivo: estos son
-     los MISMOS que usa el diccionario (_web/diccionario-bkt/) — propuesta a
-     confirmar, no canon. Los tonos (morado/rosa) sí son canon.
-     Capa retro (SNES/N64) = bordes de 4px sin radio + scanlines de CRT + chrome
-     monoespaciado en mayúsculas. No es decoración: es "camuflaje del medio"
-     (Breakthrough, 7ª técnica) — la página presta la credibilidad de una pantalla
-     de selección de personaje, y eso es lo que convierte al que llega en PLAYER 2.
-     ═══════════════════════════════════════════════════════════════════════════ */
   :root{
     --bg:#100a16;
     --bg-card:#1a1024;
@@ -55,7 +42,6 @@
     overflow-x:hidden;
   }
 
-  /* ── La rejilla del CRT. Va encima de todo, no intercepta clics. ───────────── */
   .crt{
     position:fixed;
     inset:0;
@@ -68,7 +54,6 @@
 
   .marco{max-width:25rem;margin:0 auto;position:relative;z-index:1}
 
-  /* ── Utilidad: el borde de 4px sin esquinas (el look de sprite) ───────────── */
   .pixel{
     border:0;
     border-radius:0;
@@ -79,7 +64,6 @@
        4px 0 0 0 var(--line);
   }
 
-  /* ═══ 1 · PANTALLA DE TÍTULO ═══════════════════════════════════════════════ */
   .titulo{text-align:center;margin-bottom:2.25rem}
 
   .cartucho{
@@ -108,7 +92,6 @@
     letter-spacing:.06em;
     line-height:1;
     text-transform:uppercase;
-    /* sombra dura de 4px, como un logo de 16 bits */
     text-shadow:4px 4px 0 var(--morado-hondo);
   }
 
@@ -123,7 +106,6 @@
   .jugador .parpadeo{animation:parpadeo 1.1s steps(1) infinite}
   @keyframes parpadeo{50%{opacity:0}}
 
-  /* ═══ 2 · EL HOOK ══════════════════════════════════════════════════════════ */
   .hook{
     background:var(--bg-card);
     padding:1.35rem 1.2rem;
@@ -135,7 +117,6 @@
   .hook .permiso{font-weight:600}
   .hook .permiso b{color:var(--rosa);font-weight:700}
 
-  /* ═══ 3 · EL VERSO + EL PLAY (la acción única de la página) ════════════════ */
   .pago{margin-bottom:2.5rem}
 
   .verso{
@@ -190,7 +171,6 @@
     text-wrap:balance;
   }
 
-  /* ═══ 4 · EL MENÚ DE SELECCIÓN ═════════════════════════════════════════════ */
   .rotulo{
     font-family:var(--ui);
     font-size:.58rem;
@@ -216,7 +196,6 @@
     background:transparent;
     transition:background .12s,color .12s;
   }
-  /* el puntero del menú: aparece en el que está seleccionado, como en un JRPG */
   .fila::before{
     content:"▶";
     position:absolute;
@@ -251,12 +230,10 @@
     margin-top:.3rem;
   }
 
-  /* fila con link todavía sin resolver: no se finge, se declara */
   .fila--pendiente{cursor:not-allowed;opacity:.42}
   .fila--pendiente:hover{background:transparent}
   .fila--pendiente:hover::before{opacity:0}
 
-  /* la fila del código: la puerta que cuesta */
   .fila--codigo{margin-top:.9rem}
   .fila--codigo .qué{color:var(--rosa)}
 
@@ -270,7 +247,6 @@
   .nota-codigo b{color:var(--ink)}
   .nota-codigo .payasada{display:block;margin-top:.6rem}
 
-  /* ═══ 5 · CIERRE ═══════════════════════════════════════════════════════════ */
   footer{margin-top:2.75rem;text-align:center}
 
   .sueno{
@@ -297,7 +273,6 @@
     margin-top:1.25rem;
   }
 
-  /* ── el interruptor del sonido, arriba a la derecha ───────────────────────── */
   .sonido{
     position:fixed;
     top:.6rem;
@@ -317,7 +292,6 @@
   .sonido:hover{color:var(--ink)}
   .sonido:focus-visible{outline:2px solid var(--rosa);outline-offset:2px}
 
-  /* ── Respeto por quien pidió menos movimiento ─────────────────────────────── */
   @media (prefers-reduced-motion:reduce){
     .oso,.jugador .parpadeo{animation:none}
     *{transition-duration:.01ms !important}
@@ -333,34 +307,12 @@
 </head>
 <body>
 
-<!-- ═════════════════════════════════════════════════════════════════════════════
-     ⚙ LINKS
-     ─────────────────────────────────────────────────────────────────────────────
-     Vivos (confirmados 2026-07-29):
-       ▶ DALE PLAY          → open.spotify.com/track/1Nm3oFuNaI5sv2AifP0RWl
-                              («¿Y si te vas?», single 2022 feat. Tiredxd, 2:06)
-       TODAS LAS CANCIONES  → open.spotify.com/artist/6UZyNnW5Tra3m1Y65s0G32
-       EL CANAL DE LA MÚSICA→ youtube.com/@knayabkt
-       LO DE TODOS LOS DÍAS → tiktok.com/@knayakong
-       LA CARA              → instagram.com/knayabkt
-       EL CÓDIGO            → brokenteddy.com
-
-     Falta 1 (buscá la palabra PENDIENTE):
-       EL PARCHE            → el link de invitación del canal de WhatsApp
-
-     Una fila sin link se queda APAGADA y no se puede clickear (a propósito:
-     link muerto = mentira chiquita, y la honestidad es el contrato).
-     Para encenderla: cambiá el <span class="fila fila--pendiente"> por
-     <a class="fila" href="EL-LINK"> y cerrá con </a> en vez de </span>.
-     ═════════════════════════════════════════════════════════════════════════════ -->
-
 <div class="crt" aria-hidden="true"></div>
 
 <button class="sonido" id="sonido" type="button" aria-pressed="true">🔊 SFX</button>
 
 <div class="marco">
 
-  <!-- ═══ 1 · PANTALLA DE TÍTULO ═══════════════════════════════════════════ -->
   <header class="titulo">
     <div class="cartucho pixel">
       <span class="oso" role="img" aria-label="oso">🧸</span>
@@ -369,21 +321,15 @@
     <p class="jugador"><span class="parpadeo">▌</span> Player 2 &middot; sos vos</p>
   </header>
 
-  <!-- ═══ 2 · EL HOOK ══════════════════════════════════════════════════════ -->
   <section class="hook pixel">
     <p>Si aparecías, nadie lo notaba.<br>Si desaparecías, tampoco.</p>
     <p class="sobra">Más de sobra que silla extra en almuerzo familiar.</p>
     <p class="permiso">Acá adentro nadie te va a pedir que seas otro <b>pa' que te dejen sentar</b>.</p>
   </section>
 
-  <!-- ═══ 3 · EL VERSO Y EL PLAY — la única orden de la página ══════════════ -->
   <section class="pago">
     <p class="verso">&ldquo;Ya no te quiero,<br>me quiero más.&rdquo;</p>
 
-    <!-- El CTA. Va al TRACK, no al perfil de artista: el verso de arriba abre un
-         loop y el clic tiene que cerrarlo en ESA canción. El perfil completo vive
-         abajo, en el menú. El "2:06" es real (confirmado en Spotify) y baja el
-         costo percibido justo en el instante de decidir. -->
     <a class="play" href="https://open.spotify.com/track/1Nm3oFuNaI5sv2AifP0RWl"
        data-app="com.spotify.music">
       <span class="grande">▶ Dale play</span>
@@ -393,7 +339,6 @@
     <p class="porque">La escribí pa' mí. Salió tuya. Ese es todo el truco.</p>
   </section>
 
-  <!-- ═══ 4 · EL MENÚ DE SELECCIÓN ═════════════════════════════════════════ -->
   <p class="rotulo" id="rotulo-menu">&mdash; y lo demás &mdash;</p>
 
   <ul class="menu" aria-labelledby="rotulo-menu">
@@ -442,7 +387,6 @@
       </a>
     </li>
 
-    <!-- ⛏ PENDIENTE (1/1): link de invitación del canal de WhatsApp -->
     <li>
       <span class="fila fila--pendiente" aria-disabled="true">
         <span class="emo" aria-hidden="true">💬</span>
@@ -469,7 +413,6 @@
 
   </ul>
 
-  <!-- ═══ 5 · CIERRE ═══════════════════════════════════════════════════════ -->
   <footer>
     <p class="sueno"><span>No estoy hecho pa' lastimar gente.</span><br>Mi sueño es verlos brillar a todos, hijueputa.</p>
     <p class="firma">BkT y más nah, ¡Skrt!</p>
@@ -479,12 +422,6 @@
 </div>
 
 <script>
-  /* ═══════════════════════════════════════════════════════════════════════════
-     El menú se maneja también con el teclado (↑ ↓ Enter), como el select screen
-     de un cartucho. No es un chiste: es la mitad de la razón por la que la
-     página se siente como un juego y no como un Linktree con filtro morado.
-     Todo degrada bien — sin JS los links siguen siendo links.
-     ═══════════════════════════════════════════════════════════════════════════ */
   (function () {
     "use strict";
 
@@ -495,7 +432,6 @@
 
     var cursor = -1;
 
-    /* ── El blip. Se sintetiza con WebAudio: cero archivos, cero peticiones. ── */
     var ctx = null;
     var conSonido = true;
 
@@ -519,7 +455,6 @@
         osc.start();
         osc.stop(ctx.currentTime + dur);
       } catch (e) {
-        /* si el navegador no deja, se pierde el sonido — nunca la página */
       }
     }
 
@@ -549,33 +484,11 @@
       el.addEventListener("focus", function () { cursor = i; });
     });
 
-    /* al hacer clic/tocar, el sonido de "seleccionado" (más agudo y más largo) */
     jugables.forEach(function (el) {
       el.addEventListener("click", function () { blip(990, 0.13); });
       el.addEventListener("mouseenter", function () { blip(660, 0.04); });
     });
 
-    /* ═══ ABRIR EN LA APP, NO EN EL NAVEGADOR ═══════════════════════════════════
-       El problema real: este link se abre casi siempre DENTRO del navegador
-       embebido de Instagram/TikTok, y ahí los "universal links" fallan seguido —
-       la canción termina en una pestaña web con un botón de "abrir en la app",
-       o sea dos toques de más. Eso es la fricción que hay que matar.
-
-       Lo que se puede hacer de verdad, sin romper nada:
-
-       · ANDROID → `intent://` con `browser_fallback_url`. Es a prueba de balas:
-         si la app está instalada abre la app; si no, abre la web. Nunca queda
-         en un callejón sin salida y NO muestra diálogos de error.
-
-       · iOS → se deja el `https` tal cual, a propósito. Los Universal Links de
-         Spotify y YouTube funcionan bien, y forzar el esquema `spotify:` le
-         muestra un cartel de error ("no se puede abrir la página") a quien NO
-         tenga la app instalada. Ahí el remedio es peor que la enfermedad.
-
-       El `href` del HTML sigue siendo un https real y NO se toca: así, si alguien
-       copia el link lo copia limpio, la tarjeta de previsualización funciona, y
-       sin JavaScript la página se comporta igual que siempre.
-       ═════════════════════════════════════════════════════════════════════════ */
     if (/Android/i.test(navigator.userAgent)) {
       Array.prototype.forEach.call(
         document.querySelectorAll("a[data-app]"),
@@ -596,7 +509,6 @@
       );
     }
 
-    /* ── El interruptor ─────────────────────────────────────────────────────── */
     var boton = document.getElementById("sonido");
     boton.addEventListener("click", function () {
       conSonido = !conSonido;
