@@ -331,7 +331,7 @@
     <p class="verso">&ldquo;Ya no te quiero,<br>me quiero más.&rdquo;</p>
 
     <a class="play" href="https://open.spotify.com/track/1Nm3oFuNaI5sv2AifP0RWl"
-       data-app="com.spotify.music">
+       data-android="intent://open.spotify.com/track/1Nm3oFuNaI5sv2AifP0RWl#Intent;scheme=https;package=com.spotify.music">
       <span class="grande">▶ Dale play</span>
       <span class="chico">¿Y si te vas? &middot; 2:06 &middot; Spotify</span>
     </a>
@@ -345,7 +345,7 @@
 
     <li>
       <a class="fila" href="https://open.spotify.com/artist/6UZyNnW5Tra3m1Y65s0G32"
-         data-app="com.spotify.music">
+         data-android="intent://open.spotify.com/artist/6UZyNnW5Tra3m1Y65s0G32#Intent;scheme=https;package=com.spotify.music">
         <span class="emo" aria-hidden="true">🎧</span>
         <span class="txt">
           <span class="qué">Todas las canciones</span>
@@ -356,7 +356,8 @@
 
     <li>
       <a class="fila" href="https://www.youtube.com/@knayabkt"
-         data-app="com.google.android.youtube">
+         data-android="intent://www.youtube.com/@knayabkt#Intent;scheme=vnd.youtube;package=com.google.android.youtube"
+         data-ios="youtube://www.youtube.com/@knayabkt">
         <span class="emo" aria-hidden="true">🎬</span>
         <span class="txt">
           <span class="qué">El canal de la música</span>
@@ -367,7 +368,7 @@
 
     <li>
       <a class="fila" href="https://www.tiktok.com/@knayakong"
-         data-app="com.zhiliaoapp.musically">
+         data-android="intent://www.tiktok.com/@knayakong#Intent;scheme=https">
         <span class="emo" aria-hidden="true">📱</span>
         <span class="txt">
           <span class="qué">Lo de todos los días</span>
@@ -378,7 +379,8 @@
 
     <li>
       <a class="fila" href="https://www.instagram.com/knayabkt/"
-         data-app="com.instagram.android">
+         data-android="intent://user?username=knayabkt#Intent;scheme=instagram;package=com.instagram.android"
+         data-ios="instagram://user?username=knayabkt">
         <span class="emo" aria-hidden="true">📷</span>
         <span class="txt">
           <span class="qué">La cara</span>
@@ -489,21 +491,40 @@
       el.addEventListener("mouseenter", function () { blip(660, 0.04); });
     });
 
-    if (/Android/i.test(navigator.userAgent)) {
+    var esAndroid = /Android/i.test(navigator.userAgent);
+    var esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    if (esAndroid || esIOS) {
       Array.prototype.forEach.call(
-        document.querySelectorAll("a[data-app]"),
+        document.querySelectorAll("a[data-android], a[data-ios]"),
         function (a) {
           a.addEventListener("click", function (e) {
             var web = a.getAttribute("href");
-            var paquete = a.getAttribute("data-app");
-            if (!web || !paquete) return; // sin datos, que se comporte normal
+            if (!web) return;
 
+            if (esAndroid) {
+              var intento = a.getAttribute("data-android");
+              if (!intento) return; // sin receta → comportamiento normal
+              e.preventDefault();
+              window.location.href = intento +
+                ";S.browser_fallback_url=" + encodeURIComponent(web) + ";end";
+              return;
+            }
+
+            var esquema = a.getAttribute("data-ios");
+            if (!esquema) return; // sin receta → que el https haga lo que pueda
             e.preventDefault();
-            window.location.href =
-              "intent://" + web.replace(/^https?:\/\//, "") +
-              "#Intent;scheme=https;package=" + paquete +
-              ";S.browser_fallback_url=" + encodeURIComponent(web) +
-              ";end";
+
+            var red = setTimeout(function () { window.location.href = web; }, 1400);
+            function cancelar() { clearTimeout(red); }
+            // cualquiera de las dos señales significa "la app se abrió"
+            document.addEventListener("visibilitychange", function () {
+              if (document.hidden) cancelar();
+            }, { once: true });
+            window.addEventListener("pagehide", cancelar, { once: true });
+
+            window.location.href = esquema;
           });
         }
       );
